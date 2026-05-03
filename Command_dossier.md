@@ -199,5 +199,67 @@ or start a new section. Follow the same style:
 - If a *pattern* is being noticed (something that repeats across tools),
   give it its own "Pattern:" subsection.
 
+  ## Pattern: file extensions matter
+
+The system identifies file type by extension, not by name.
+Without `.md`, GitHub treats a markdown file as plain text and shows
+line numbers instead of rendering it. Always include the extension:
+
+- `.md` — markdown (renders on GitHub, in Jupyter, in VS Code)
+- `.py` — Python source
+- `.ipynb` — Jupyter notebook
+- `.txt` — plain text
+- `.docx` — Word document (binary; do not put in Git unless necessary)
+
+---
+
+## Jupyter: kernel does not auto-appear
+
+Creating a new conda environment does **not** automatically add it to
+Jupyter's "New" menu. Each environment must register itself as a kernel.
+
+```
+conda activate <env-name>
+pip install ipykernel
+python -m ipykernel install --user --name <env-name> --display-name "Python (<env-name>)"
+```
+
+Refresh the Jupyter browser tab — the new kernel appears.
+
+A conda *environment* is a folder with its own Python.
+A Jupyter *kernel* is a registry entry pointing at one such Python.
+Two different things; registration is a separate step.
+
+---
+
+## Lesson: GitHub returns 404 for private repos without auth
+
+When Colab (or any tool) tries to access a private GitHub repo without
+authentication, GitHub returns `404 Not Found`, not `403 Forbidden`.
+This is by design — GitHub will not even confirm the repo exists.
+
+Fix: either make the repo public, or authenticate Colab via
+File → Open notebook → GitHub tab → "Include private repos" → Sign in.
+
+---
+
+## Lesson: long URLs in notebook badge cells break JSON
+
+When pasting an "Open in Colab" badge URL into a markdown cell of a
+`.ipynb` file, keep the URL on **one single line**. A line break
+inside the URL string breaks the JSON, and the notebook fails to load
+with "The Notebook Does Not Appear to Be Valid JSON".
+
+Wrong (line-wrapped):
+```
+.../IshtVibhu/Python-for-Computational-Economics
+/blob/main/NB_02_NumPy.ipynb
+```
+
+Right (single line):
+```
+.../IshtVibhu/Python-for-Computational-Economics/blob/main/NB_02_NumPy.ipynb
+```
+
 Patterns are more valuable than commands. The brain remembers ten
 patterns more easily than a hundred commands.
